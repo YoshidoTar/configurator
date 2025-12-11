@@ -15,13 +15,11 @@ class LoginWindow(BaseWindow):
         self.show_login_screen()
 
     def show_login_screen(self):
-        # Очищаем центральную область
         self.clear_center()
 
         self.add_title("🎮 Конфигуратор ПК РАНХиГС")
         self.add_subtitle("Соберите свой идеальный компьютер")
 
-        # Поля ввода
         self.username_input = QtWidgets.QLineEdit(self)
         self.username_input.setPlaceholderText("Введите имя пользователя")
         self.center_layout.addWidget(self.username_input, alignment=QtCore.Qt.AlignCenter)
@@ -31,11 +29,9 @@ class LoginWindow(BaseWindow):
         self.password_input.setEchoMode(QtWidgets.QLineEdit.Password)
         self.center_layout.addWidget(self.password_input, alignment=QtCore.Qt.AlignCenter)
 
-        # Кнопки
         self.add_button("🔐 Войти", self.login)
         self.add_button("📝 Зарегистрироваться", self.register)
 
-        # Связываем кнопки
         self.back_button.hide()
         self.help_button.clicked.connect(self.show_help)
 
@@ -43,7 +39,6 @@ class LoginWindow(BaseWindow):
         HelpDialogs.show_amd_vs_intel(self)
 
     def clear_center(self):
-        # Удаляем все виджеты из центральной области
         for i in reversed(range(self.center_layout.count())):
             widget = self.center_layout.itemAt(i).widget()
             if widget is not None:
@@ -131,7 +126,6 @@ class LoginWindow(BaseWindow):
 
         processors = ConfigLogic.get_processors_by_budget(budget)
 
-        # Создаем Scroll Area для прокрутки
         scroll = QtWidgets.QScrollArea()
         scroll.setWidgetResizable(True)
         scroll.setStyleSheet("""
@@ -160,7 +154,6 @@ class LoginWindow(BaseWindow):
             brand_color = "#38bdf8" if info.get("brand") == "AMD" else "#f59e0b"
             brand_text = "AMD" if info.get("brand") == "AMD" else "Intel"
 
-            # Создаем карточку
             card = QtWidgets.QFrame()
             card.setStyleSheet(f"""
                 QFrame {{
@@ -178,10 +171,8 @@ class LoginWindow(BaseWindow):
             card_layout.setContentsMargins(15, 15, 15, 15)
             card_layout.setSpacing(8)
 
-            # Верхняя строка: бренд и название
             top_layout = QtWidgets.QHBoxLayout()
 
-            # Бейдж бренда
             brand_label = QtWidgets.QLabel(brand_text)
             brand_label.setStyleSheet(f"""
                 QLabel {{
@@ -196,7 +187,6 @@ class LoginWindow(BaseWindow):
             """)
             top_layout.addWidget(brand_label)
 
-            # Название процессора
             name_label = QtWidgets.QLabel(processor)
             name_label.setStyleSheet("color: white; font-weight: bold; font-size: 16px;")
             top_layout.addWidget(name_label)
@@ -204,18 +194,15 @@ class LoginWindow(BaseWindow):
 
             card_layout.addLayout(top_layout)
 
-            # Спецификации
             specs_label = QtWidgets.QLabel(f"Сокет: {info.get('socket', 'N/A')} | TDP: {info.get('tpd', 'N/A')}W")
             specs_label.setStyleSheet("color: #cbd5e1; font-size: 13px;")
             card_layout.addWidget(specs_label)
 
-            # Описание
             desc_label = QtWidgets.QLabel(info.get('description', ''))
             desc_label.setStyleSheet("color: #94a3b8; font-size: 12px;")
             desc_label.setWordWrap(True)
             card_layout.addWidget(desc_label)
 
-            # Кнопка выбора
             select_btn = QtWidgets.QPushButton("✅ Выбрать")
             select_btn.setStyleSheet(f"""
                 QPushButton {{
@@ -262,7 +249,6 @@ class LoginWindow(BaseWindow):
             self.back_button.clicked.connect(lambda: self.show_processor_selection(budget))
             return
 
-        # Создаем Scroll Area
         scroll = QtWidgets.QScrollArea()
         scroll.setWidgetResizable(True)
         scroll.setStyleSheet("""
@@ -278,13 +264,11 @@ class LoginWindow(BaseWindow):
         scroll_layout.setContentsMargins(10, 10, 10, 10)
 
         for mb in motherboards:
-            # Получаем название материнской платы
             if isinstance(mb, tuple):
                 mb_name = mb[0]
             else:
                 mb_name = mb
 
-            # Создаем карточку
             card = QtWidgets.QFrame()
             card.setStyleSheet("""
                 QFrame {
@@ -302,12 +286,10 @@ class LoginWindow(BaseWindow):
             card_layout.setContentsMargins(15, 15, 15, 15)
             card_layout.setSpacing(8)
 
-            # Название материнской платы
             name_label = QtWidgets.QLabel(mb_name)
             name_label.setStyleSheet("color: white; font-weight: bold; font-size: 16px;")
             card_layout.addWidget(name_label)
 
-            # Совместимая память (если есть в кортеже)
             if isinstance(mb, tuple) and len(mb) > 1:
                 memory = mb[1] if len(mb) > 1 else "16GB DDR4"
                 specs_text = f"Совместимая память: {memory}"
@@ -318,7 +300,6 @@ class LoginWindow(BaseWindow):
             specs_label.setStyleSheet("color: #cbd5e1; font-size: 13px;")
             card_layout.addWidget(specs_label)
 
-            # Кнопка выбора
             select_btn = QtWidgets.QPushButton("✅ Выбрать")
             select_btn.setStyleSheet("""
                 QPushButton {
@@ -364,7 +345,6 @@ class LoginWindow(BaseWindow):
             self.back_button.clicked.connect(lambda: self.show_motherboard_selection(budget, processor))
             return
 
-        # Создаем Scroll Area
         scroll = QtWidgets.QScrollArea()
         scroll.setWidgetResizable(True)
         scroll.setStyleSheet("""
@@ -382,7 +362,6 @@ class LoginWindow(BaseWindow):
         for vc in videocards:
             info = ConfigLogic.get_videocard_info(vc)
 
-            # Создаем карточку
             card = QtWidgets.QFrame()
             card.setStyleSheet("""
                 QFrame {
@@ -400,12 +379,10 @@ class LoginWindow(BaseWindow):
             card_layout.setContentsMargins(15, 15, 15, 15)
             card_layout.setSpacing(8)
 
-            # Название видеокарты
             name_label = QtWidgets.QLabel(vc)
             name_label.setStyleSheet("color: white; font-weight: bold; font-size: 16px;")
             card_layout.addWidget(name_label)
 
-            # Характеристики
             if info:
                 specs_text = f"Потребление: {info.get('tpd', 'N/A')}W | Мин. БП: {info.get('min_psu', 'N/A')}W"
             else:
@@ -415,7 +392,6 @@ class LoginWindow(BaseWindow):
             specs_label.setStyleSheet("color: #cbd5e1; font-size: 13px;")
             card_layout.addWidget(specs_label)
 
-            # Кнопка выбора
             select_btn = QtWidgets.QPushButton("✅ Выбрать")
             select_btn.setStyleSheet("""
                 QPushButton {
@@ -453,11 +429,9 @@ class LoginWindow(BaseWindow):
 
         memory_options = ConfigLogic.MEMORY_OPTIONS
 
-        # Группируем по типу
         ddr4_options = [m for m in memory_options if m["type"] == "DDR4"]
         ddr5_options = [m for m in memory_options if m["type"] == "DDR5"]
 
-        # Создаем Scroll Area
         scroll = QtWidgets.QScrollArea()
         scroll.setWidgetResizable(True)
         scroll.setStyleSheet("""
@@ -472,7 +446,6 @@ class LoginWindow(BaseWindow):
         scroll_layout.setSpacing(10)
         scroll_layout.setContentsMargins(10, 10, 10, 10)
 
-        # DDR4 память
         if ddr4_options:
             ddr4_label = QtWidgets.QLabel("DDR4 память:")
             ddr4_label.setStyleSheet("color: #8b5cf6; font-size: 18px; font-weight: bold; margin-top: 10px;")
@@ -496,7 +469,6 @@ class LoginWindow(BaseWindow):
                 card_layout.setContentsMargins(15, 15, 15, 15)
                 card_layout.setSpacing(8)
 
-                # Название и скорость
                 name_label = QtWidgets.QLabel(mem["name"])
                 name_label.setStyleSheet("color: white; font-weight: bold; font-size: 16px;")
                 card_layout.addWidget(name_label)
@@ -528,7 +500,6 @@ class LoginWindow(BaseWindow):
 
                 scroll_layout.addWidget(card)
 
-        # DDR5 память
         if ddr5_options:
             ddr5_label = QtWidgets.QLabel("DDR5 память:")
             ddr5_label.setStyleSheet("color: #0ea5e9; font-size: 18px; font-weight: bold; margin-top: 20px;")
@@ -552,7 +523,6 @@ class LoginWindow(BaseWindow):
                 card_layout.setContentsMargins(15, 15, 15, 15)
                 card_layout.setSpacing(8)
 
-                # Название и скорость
                 name_label = QtWidgets.QLabel(mem["name"])
                 name_label.setStyleSheet("color: white; font-weight: bold; font-size: 16px;")
                 card_layout.addWidget(name_label)
@@ -598,10 +568,8 @@ class LoginWindow(BaseWindow):
         self.add_title("⚡ Выберите блок питания")
         self.add_subtitle("Рекомендации основаны на ваших комплектующих")
 
-        # Расчет требований к БП
         psu_info = ConfigLogic.calculate_required_psu(processor, videocard)
 
-        # Информация о потреблении
         info_frame = QtWidgets.QFrame()
         info_frame.setStyleSheet("""
             QFrame {
@@ -618,7 +586,6 @@ class LoginWindow(BaseWindow):
         info_title.setStyleSheet("color: #38bdf8; font-weight: bold; font-size: 16px;")
         info_layout.addWidget(info_title)
 
-        # Детали расчета
         details_text = f"""
         • Процессор: {psu_info.get('processor_tpd', 'N/A')}W
         • Видеокарта: {psu_info.get('videocard_tpd', 'N/A')}W
@@ -632,7 +599,6 @@ class LoginWindow(BaseWindow):
         details_label.setStyleSheet("color: #cbd5e1; font-size: 14px;")
         info_layout.addWidget(details_label)
 
-        # Кнопка подробной информации
         info_btn = QtWidgets.QPushButton("📊 Подробнее о расчете БП")
         info_btn.setStyleSheet("""
             QPushButton {
@@ -654,12 +620,10 @@ class LoginWindow(BaseWindow):
 
         self.center_layout.addWidget(info_frame)
 
-        # Доступные блоки питания
         title_label = QtWidgets.QLabel("✅ Подходящие блоки питания:")
         title_label.setStyleSheet("color: #10b981; font-size: 18px; font-weight: bold; margin-top: 20px;")
         self.center_layout.addWidget(title_label)
 
-        # Создаем Scroll Area
         scroll = QtWidgets.QScrollArea()
         scroll.setWidgetResizable(True)
         scroll.setStyleSheet("""
@@ -679,7 +643,6 @@ class LoginWindow(BaseWindow):
             suitable_options = [500, 650, 750, 850, 1000]  # Значения по умолчанию
 
         for wattage in suitable_options:
-            # Определяем цвет и текст в зависимости от мощности
             if wattage == 500:
                 card_title = f"{wattage}W (80+ Bronze)"
                 card_subtitle = "Минимальный вариант"
@@ -718,17 +681,14 @@ class LoginWindow(BaseWindow):
             card_layout.setContentsMargins(15, 15, 15, 15)
             card_layout.setSpacing(8)
 
-            # Заголовок
             title_label = QtWidgets.QLabel(card_title)
             title_label.setStyleSheet(f"color: {card_color}; font-weight: bold; font-size: 16px;")
             card_layout.addWidget(title_label)
 
-            # Подзаголовок
             subtitle_label = QtWidgets.QLabel(card_subtitle)
             subtitle_label.setStyleSheet("color: #cbd5e1; font-size: 13px;")
             card_layout.addWidget(subtitle_label)
 
-            # Кнопка выбора
             select_btn = QtWidgets.QPushButton("✅ Выбрать")
             select_btn.setStyleSheet(f"""
                 QPushButton {{
@@ -770,7 +730,7 @@ class LoginWindow(BaseWindow):
         }
 
         if self.db.save_configuration(self.current_user_id, str(configuration)):
-            # Показываем итоговую сборку
+
             self.show_final_build(configuration)
         else:
             QtWidgets.QMessageBox.warning(self, "Ошибка", "Не удалось сохранить сборку")
@@ -781,7 +741,6 @@ class LoginWindow(BaseWindow):
         self.add_title("✅ Сборка сохранена!")
         self.add_subtitle("Ваша конфигурация:")
 
-        # Создаем карточку с деталями
         details_frame = QtWidgets.QFrame()
         details_frame.setStyleSheet("""
             QFrame {
@@ -798,7 +757,6 @@ class LoginWindow(BaseWindow):
         title.setStyleSheet("color: #10b981; font-weight: bold; font-size: 20px;")
         details_layout.addWidget(title)
 
-        # Детали сборки
         details_text = f"""
         ⚙️ Процессор: {configuration.get('processor', 'N/A')}
         🖥️ Материнская плата: {configuration.get('motherboard', 'N/A')}
@@ -813,7 +771,6 @@ class LoginWindow(BaseWindow):
 
         self.center_layout.addWidget(details_frame)
 
-        # Кнопки действий
         self.add_button("💾 Сохранить еще одну копию",
                         lambda: self.db.save_configuration(self.current_user_id, str(configuration)))
         self.add_button("🏠 В главное меню", self.show_main_menu)
@@ -834,7 +791,6 @@ class LoginWindow(BaseWindow):
             self.back_button.clicked.connect(lambda: self.show_build_type_selection(False))
             return
 
-        # Создаем Scroll Area для конфигураций
         scroll = QtWidgets.QScrollArea()
         scroll.setWidgetResizable(True)
         scroll.setStyleSheet("""
@@ -874,12 +830,10 @@ class LoginWindow(BaseWindow):
 
             frame_layout = QtWidgets.QVBoxLayout(frame)
 
-            # Заголовок сборки
             title = QtWidgets.QLabel(f"💻 {config['processor']} + {config['videocard']}")
             title.setStyleSheet("font-size: 18px; font-weight: bold; color: #38bdf8;")
             frame_layout.addWidget(title)
 
-            # Комплектующие
             specs = QtWidgets.QLabel(f"""
             🖥️ Материнская плата: {config['motherboard']}
             💾 Память: {config['memory']}
@@ -959,7 +913,6 @@ class LoginWindow(BaseWindow):
 
             for config in configurations:
                 try:
-                    # Парсим строку конфигурации
                     import ast
                     config_dict = ast.literal_eval(config[0])
 

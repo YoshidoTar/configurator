@@ -121,19 +121,14 @@ class ConfigLogic:
         processor = ConfigLogic.PROCESSORS.get(processor_name, {"tpd": 100, "min_psu": 500})
         videocard = ConfigLogic.VIDEO_CARDS.get(videocard_name, {"tpd": 150, "min_psu": 500, "recommended_psu": 600})
 
-        # Базовое потребление системы (материнка, память, накопители)
         base_consumption = 100
 
-        # Общее потребление
         total_tpd = processor["tpd"] + videocard["tpd"] + base_consumption
 
-        # Минимальный БП
         min_required = max(processor.get("min_psu", 500), videocard.get("min_psu", 500))
 
-        # Рекомендуемый БП (запас 20%)
         recommended = int(total_tpd * 1.2)
 
-        # Выбираем ближайший доступный БП
         available_psus = [psu["wattage"] for psu in ConfigLogic.POWER_SUPPLIES]
         suitable_psus = [w for w in available_psus if w >= recommended]
 

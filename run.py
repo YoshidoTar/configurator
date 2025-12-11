@@ -1,19 +1,16 @@
 import sys
 import os
 
-# Добавляем текущую директорию в путь Python
 sys.path.insert(0, os.path.dirname(__file__))
 
 from PyQt5 import QtWidgets
 
-# Импортируем все необходимые модули
 try:
     from ui_main import LoginWindow
 except ImportError as e:
     print(f"Ошибка импорта: {e}")
     print("Создаю необходимые файлы...")
 
-    # Создаем простую версию help_dialogs.py если её нет
     help_dialogs_code = '''
 from PyQt5 import QtWidgets, QtCore, QtGui
 
