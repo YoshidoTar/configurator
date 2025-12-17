@@ -1,6 +1,6 @@
 import sys
 from PyQt5 import QtWidgets
-from ui_main import LoginWindow
+from ui_main import LoginWindowт
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)

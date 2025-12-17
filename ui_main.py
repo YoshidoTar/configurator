@@ -1,9 +1,13 @@
 from PyQt5 import QtWidgets, QtCore, QtGui
+import sys
+import subprocess  # >>> ДОБАВЛЕНО <<<
+
 from ui_base import BaseWindow
 from database import Database
 from logic import ConfigLogic
 from help_dialogs import HelpDialogs
 from admin import AdminPanel
+from dialog import ConfigurationDialog
 
 
 class LoginWindow(BaseWindow):
@@ -41,7 +45,7 @@ class LoginWindow(BaseWindow):
     def clear_center(self):
         for i in reversed(range(self.center_layout.count())):
             widget = self.center_layout.itemAt(i).widget()
-            if widget is not None:
+            if widget:
                 widget.deleteLater()
 
     def login(self):
@@ -90,10 +94,24 @@ class LoginWindow(BaseWindow):
         self.add_button("💻 Готовая сборка", lambda: self.show_build_type_selection(False))
         self.add_button("🔧 Сборка по комплектующим", lambda: self.show_build_type_selection(True))
         self.add_button("📂 Мои сохраненные сборки", self.show_saved_configs)
+
+        # >>> ДОБАВЛЕНО <<<
+        self.add_button("🏀 Сыграть в игру", self.start_game)
+
         self.add_button("🚪 Выйти", self.logout)
 
         self.back_button.show()
         self.back_button.clicked.connect(self.logout)
+
+    def start_game(self):  # >>> ДОБАВЛЕНО <<<
+        try:
+            subprocess.Popen([sys.executable, "game.py"])
+        except Exception as e:
+            QtWidgets.QMessageBox.critical(
+                self,
+                "Ошибка",
+                f"Не удалось запустить игру:\n{e}"
+            )
 
     def show_admin_panel(self):
         self.admin_window = AdminPanel(self.db)
